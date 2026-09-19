@@ -259,7 +259,7 @@ export function ReservationForm({
             name="name"
             value={form.name}
             onChange={(e) => update("name", e.target.value)}
-            placeholder="e.g. Akingbade"
+            placeholder="e.g. Tumininu Akingbade"
             autoComplete="name"
           />
         </Field>
