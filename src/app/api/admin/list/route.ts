@@ -3,10 +3,20 @@ import { getReservations } from "@/lib/reservations";
 
 export const runtime = "nodejs";
 
+function expectedPassword() {
+  return (process.env.ADMIN_PASSWORD || "akingbade2026").trim();
+}
+
 function authorized(request: Request) {
-  const expected = process.env.ADMIN_PASSWORD || "akingbade2026";
-  const header = request.headers.get("x-admin-password") || "";
-  return header === expected;
+  const expected = expectedPassword();
+  const url = new URL(request.url);
+  const fromQuery = (url.searchParams.get("password") || "").trim();
+  const fromHeader = (request.headers.get("x-admin-password") || "").trim();
+  const auth = request.headers.get("authorization") || "";
+  const fromBearer = auth.toLowerCase().startsWith("bearer ")
+    ? auth.slice(7).trim()
+    : "";
+  return [fromQuery, fromHeader, fromBearer].includes(expected);
 }
 
 export async function GET(request: Request) {

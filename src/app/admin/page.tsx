@@ -26,14 +26,17 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
 
   async function load(pw: string) {
+    const password = pw.trim();
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/admin/list", {
-        headers: { "x-admin-password": pw },
-      });
+      const res = await fetch(
+        `/api/admin/list?password=${encodeURIComponent(password)}`,
+        { cache: "no-store" },
+      );
       if (res.status === 401) {
         setAuthed(false);
+        sessionStorage.removeItem("admin-pw");
         setError("Wrong password.");
         setLoading(false);
         return;
@@ -47,7 +50,7 @@ export default function AdminPage() {
       const data = await res.json();
       setRows(data.reservations || []);
       setAuthed(true);
-      sessionStorage.setItem("admin-pw", pw);
+      sessionStorage.setItem("admin-pw", password);
     } catch {
       setError("Could not load requests.");
     }
@@ -60,10 +63,11 @@ export default function AdminPage() {
       setPassword(saved);
       void load(saved);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function downloadDoc() {
-    const pw = password || sessionStorage.getItem("admin-pw") || "";
+    const pw = (password || sessionStorage.getItem("admin-pw") || "").trim();
     window.location.href = `/api/admin/export?password=${encodeURIComponent(pw)}`;
   }
 

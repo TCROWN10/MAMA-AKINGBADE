@@ -5,10 +5,10 @@ import { getReservations } from "@/lib/reservations";
 export const runtime = "nodejs";
 
 function authorized(request: Request) {
-  const expected = process.env.ADMIN_PASSWORD || "akingbade2026";
-  const header = request.headers.get("x-admin-password") || "";
+  const expected = (process.env.ADMIN_PASSWORD || "akingbade2026").trim();
+  const header = (request.headers.get("x-admin-password") || "").trim();
   const url = new URL(request.url);
-  const query = url.searchParams.get("password") || "";
+  const query = (url.searchParams.get("password") || "").trim();
   return header === expected || query === expected;
 }
 
