@@ -12,6 +12,8 @@ type FormState = {
   numberOfRooms: string;
   peoplePerRoom: string;
   totalPeopleNeedingStay: string;
+  priceRange: string;
+  hotelRating: string;
 };
 
 const empty: FormState = {
@@ -24,7 +26,16 @@ const empty: FormState = {
   numberOfRooms: "1",
   peoplePerRoom: "1",
   totalPeopleNeedingStay: "1",
+  priceRange: "",
+  hotelRating: "",
 };
+
+const PRICE_OPTIONS = [
+  "Under ₦30,000",
+  "₦30,000 – ₦60,000",
+  "₦60,000 – ₦100,000",
+  "₦100,000+",
+] as const;
 
 function nightsBetween(arrival: string, departure: string) {
   if (!arrival || !departure) return "";
@@ -148,6 +159,7 @@ export function ReservationForm({
     const totalPeopleNeedingStay = Number(form.totalPeopleNeedingStay);
     const daysToBook = Number(form.daysToBook);
     const numberOfRooms = Number(form.numberOfRooms);
+    const hotelRating = Number(form.hotelRating);
     const submittedName = form.name.trim();
 
     if (peoplePerRoom < 1 || peoplePerRoom > 2) {
@@ -159,6 +171,18 @@ export function ReservationForm({
     if (!Number.isFinite(numberOfRooms) || numberOfRooms < 1) {
       setStatus("error");
       setMessage("Number of rooms must be at least 1.");
+      return;
+    }
+
+    if (!form.priceRange) {
+      setStatus("error");
+      setMessage("Please select a hotel price range.");
+      return;
+    }
+
+    if (![1, 2, 3, 4, 5].includes(hotelRating)) {
+      setStatus("error");
+      setMessage("Please select a hotel rating.");
       return;
     }
 
@@ -176,6 +200,8 @@ export function ReservationForm({
           numberOfRooms,
           peoplePerRoom,
           totalPeopleNeedingStay,
+          priceRange: form.priceRange,
+          hotelRating,
         }),
       });
       const data = await res.json();
@@ -343,6 +369,57 @@ export function ReservationForm({
             min={1}
             onChange={(v) => update("totalPeopleNeedingStay", v)}
           />
+        </Field>
+
+        <Field
+          className="full"
+          label="Hotel price range"
+          hint="Per night, in Naira"
+        >
+          <div
+            className="choice-row choice-row-wrap"
+            role="radiogroup"
+            aria-label="Hotel price range"
+          >
+            {PRICE_OPTIONS.map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                role="radio"
+                aria-checked={form.priceRange === opt}
+                className={`choice-chip choice-chip-wide ${form.priceRange === opt ? "is-active" : ""}`}
+                onClick={() => update("priceRange", opt)}
+              >
+                <strong>{opt}</strong>
+              </button>
+            ))}
+          </div>
+        </Field>
+
+        <Field
+          className="full"
+          label="Hotel rating"
+          hint="Preferred star rating"
+        >
+          <div
+            className="choice-row choice-row-stars"
+            role="radiogroup"
+            aria-label="Hotel rating"
+          >
+            {([1, 2, 3, 4, 5] as const).map((opt) => (
+              <button
+                key={opt}
+                type="button"
+                role="radio"
+                aria-checked={form.hotelRating === String(opt)}
+                className={`choice-chip ${form.hotelRating === String(opt) ? "is-active" : ""}`}
+                onClick={() => update("hotelRating", String(opt))}
+              >
+                <strong>{opt}★</strong>
+                <span>star{opt > 1 ? "s" : ""}</span>
+              </button>
+            ))}
+          </div>
         </Field>
       </div>
 

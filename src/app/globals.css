@@ -635,6 +635,31 @@ a {
   gap: 0.65rem;
 }
 
+.choice-row-wrap {
+  grid-template-columns: 1fr 1fr;
+}
+
+.choice-row-stars {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.choice-chip-wide strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.25;
+}
+
+@media (max-width: 767px) {
+  .choice-row-stars {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .choice-row-wrap {
+    grid-template-columns: 1fr;
+  }
+}
+
 .choice-chip {
   display: grid;
   gap: 0.1rem;

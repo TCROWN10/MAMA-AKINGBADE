@@ -13,6 +13,8 @@ type Reservation = {
   numberOfRooms: number;
   peoplePerRoom: number;
   totalPeopleNeedingStay: number;
+  priceRange?: string;
+  hotelRating?: number;
   createdAt: string;
 };
 
@@ -125,13 +127,15 @@ export default function AdminPage() {
                 <th>Rooms</th>
                 <th>Per room</th>
                 <th>Total guests</th>
+                <th>Price range</th>
+                <th>Rating</th>
                 <th>Submitted</th>
               </tr>
             </thead>
             <tbody>
               {rows.length === 0 ? (
                 <tr>
-                  <td colSpan={10}>No requests yet.</td>
+                  <td colSpan={12}>No requests yet.</td>
                 </tr>
               ) : (
                 rows.map((r) => (
@@ -145,6 +149,8 @@ export default function AdminPage() {
                     <td>{r.numberOfRooms ?? "—"}</td>
                     <td>{r.peoplePerRoom}</td>
                     <td>{r.totalPeopleNeedingStay}</td>
+                    <td>{r.priceRange || "—"}</td>
+                    <td>{r.hotelRating ? `${r.hotelRating}★` : "—"}</td>
                     <td>{new Date(r.createdAt).toLocaleString()}</td>
                   </tr>
                 ))

@@ -36,6 +36,8 @@ export async function buildReservationsDocx(
       cell("Rooms", true),
       cell("Per room", true),
       cell("Total guests", true),
+      cell("Price range", true),
+      cell("Rating", true),
       cell("Submitted", true),
     ],
   });
@@ -53,6 +55,8 @@ export async function buildReservationsDocx(
           cell(String(r.numberOfRooms ?? "")),
           cell(String(r.peoplePerRoom)),
           cell(String(r.totalPeopleNeedingStay)),
+          cell(r.priceRange || "—"),
+          cell(r.hotelRating ? `${r.hotelRating}★` : "—"),
           cell(new Date(r.createdAt).toLocaleString()),
         ],
       }),

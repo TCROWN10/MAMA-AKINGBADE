@@ -3,6 +3,13 @@ import { addReservation } from "@/lib/reservations";
 
 export const runtime = "nodejs";
 
+const PRICE_RANGES = new Set([
+  "Under ₦30,000",
+  "₦30,000 – ₦60,000",
+  "₦60,000 – ₦100,000",
+  "₦100,000+",
+]);
+
 type Body = {
   name?: string;
   telephone?: string;
@@ -13,6 +20,8 @@ type Body = {
   numberOfRooms?: number;
   peoplePerRoom?: number;
   totalPeopleNeedingStay?: number;
+  priceRange?: string;
+  hotelRating?: number;
 };
 
 export async function POST(request: Request) {
@@ -32,6 +41,8 @@ export async function POST(request: Request) {
   const numberOfRooms = Number(body.numberOfRooms);
   const peoplePerRoom = Number(body.peoplePerRoom);
   const totalPeopleNeedingStay = Number(body.totalPeopleNeedingStay);
+  const priceRange = body.priceRange?.trim() ?? "";
+  const hotelRating = Number(body.hotelRating);
 
   if (!name || !telephone || !arrivalDate || !departureDate) {
     return NextResponse.json(
@@ -75,6 +86,20 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!PRICE_RANGES.has(priceRange)) {
+    return NextResponse.json(
+      { error: "Please select a hotel price range." },
+      { status: 400 },
+    );
+  }
+
+  if (![1, 2, 3, 4, 5].includes(hotelRating)) {
+    return NextResponse.json(
+      { error: "Please select a hotel rating from 1 to 5 stars." },
+      { status: 400 },
+    );
+  }
+
   if (new Date(departureDate) <= new Date(arrivalDate)) {
     return NextResponse.json(
       { error: "Departure date must be after arrival date." },
@@ -92,6 +117,8 @@ export async function POST(request: Request) {
     numberOfRooms,
     peoplePerRoom,
     totalPeopleNeedingStay,
+    priceRange,
+    hotelRating,
   });
 
   return NextResponse.json({ ok: true, reservation }, { status: 201 });

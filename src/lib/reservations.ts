@@ -12,6 +12,8 @@ export type Reservation = {
   numberOfRooms: number;
   peoplePerRoom: number;
   totalPeopleNeedingStay: number;
+  priceRange: string;
+  hotelRating: number;
   createdAt: string;
 };
 
