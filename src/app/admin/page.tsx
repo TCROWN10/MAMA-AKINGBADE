@@ -32,9 +32,15 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/list", {
         headers: { "x-admin-password": pw },
       });
-      if (!res.ok) {
+      if (res.status === 401) {
         setAuthed(false);
         setError("Wrong password.");
+        setLoading(false);
+        return;
+      }
+      if (!res.ok) {
+        setAuthed(false);
+        setError("Server error loading requests. Please try again.");
         setLoading(false);
         return;
       }

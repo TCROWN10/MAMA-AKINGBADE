@@ -1,4 +1,5 @@
 import { promises as fs } from "fs";
+import os from "os";
 import path from "path";
 
 export type Reservation = {
@@ -17,21 +18,27 @@ export type Reservation = {
   createdAt: string;
 };
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const DATA_FILE = path.join(DATA_DIR, "reservations.json");
+function dataFilePath() {
+  // Vercel’s app directory is read-only; use /tmp for writable storage.
+  if (process.env.VERCEL) {
+    return path.join(os.tmpdir(), "mama-akingbade-reservations.json");
+  }
+  return path.join(process.cwd(), "data", "reservations.json");
+}
 
 async function ensureStore() {
-  await fs.mkdir(DATA_DIR, { recursive: true });
+  const file = dataFilePath();
+  await fs.mkdir(path.dirname(file), { recursive: true });
   try {
-    await fs.access(DATA_FILE);
+    await fs.access(file);
   } catch {
-    await fs.writeFile(DATA_FILE, "[]", "utf8");
+    await fs.writeFile(file, "[]", "utf8");
   }
 }
 
 export async function getReservations(): Promise<Reservation[]> {
   await ensureStore();
-  const raw = await fs.readFile(DATA_FILE, "utf8");
+  const raw = await fs.readFile(dataFilePath(), "utf8");
   try {
     const parsed = JSON.parse(raw) as Reservation[];
     return Array.isArray(parsed) ? parsed : [];
@@ -50,6 +57,10 @@ export async function addReservation(
     createdAt: new Date().toISOString(),
   };
   reservations.unshift(reservation);
-  await fs.writeFile(DATA_FILE, JSON.stringify(reservations, null, 2), "utf8");
+  await fs.writeFile(
+    dataFilePath(),
+    JSON.stringify(reservations, null, 2),
+    "utf8",
+  );
   return reservation;
 }

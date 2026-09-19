@@ -17,15 +17,23 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const reservations = await getReservations();
-  const buffer = await buildReservationsDocx(reservations);
-  const filename = `mama-akingbade-guest-stays-${new Date().toISOString().slice(0, 10)}.docx`;
+  try {
+    const reservations = await getReservations();
+    const buffer = await buildReservationsDocx(reservations);
+    const filename = `mama-akingbade-guest-stays-${new Date().toISOString().slice(0, 10)}.docx`;
 
-  return new NextResponse(new Uint8Array(buffer), {
-    headers: {
-      "Content-Type":
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "Content-Disposition": `attachment; filename="${filename}"`,
-    },
-  });
+    return new NextResponse(new Uint8Array(buffer), {
+      headers: {
+        "Content-Type":
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "Content-Disposition": `attachment; filename="${filename}"`,
+      },
+    });
+  } catch (error) {
+    console.error("admin export failed", error);
+    return NextResponse.json(
+      { error: "Could not export reservations." },
+      { status: 500 },
+    );
+  }
 }

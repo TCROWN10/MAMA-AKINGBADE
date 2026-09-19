@@ -13,6 +13,14 @@ export async function GET(request: Request) {
   if (!authorized(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const reservations = await getReservations();
-  return NextResponse.json({ reservations });
+  try {
+    const reservations = await getReservations();
+    return NextResponse.json({ reservations });
+  } catch (error) {
+    console.error("admin list failed", error);
+    return NextResponse.json(
+      { error: "Could not load reservations." },
+      { status: 500 },
+    );
+  }
 }
