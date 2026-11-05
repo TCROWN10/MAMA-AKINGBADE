@@ -16,12 +16,12 @@ export default function HomePage() {
             <p className="hero-kicker">In loving memory</p>
             <h1>Mama Akingbade</h1>
             <p>
-              This site helps guests request hotel accommodation. Our family
-              will book your stay for you.
+              A memorial space for Mama Akingbade. Accommodation registration
+              is now closed; the site remains open for family and guests.
             </p>
             <div className="hero-actions">
-              <a href="#register" className="btn-primary">
-                Request accommodation
+              <a href="#contact" className="btn-primary">
+                Contact family
               </a>
             </div>
           </div>
@@ -31,14 +31,10 @@ export default function HomePage() {
           <div className="section-inner narrow">
             <h2>Accommodation</h2>
             <p className="section-lead">
-              Tell us your travel dates and how many people need a room. We
-              handle the hotel booking manually from your request.
+              Guest hotel registration for this gathering is no longer
+              available. Existing arrangements stand; new requests are not
+              being accepted.
             </p>
-            <ul className="plain-list">
-              <li>Submit your details once — they are saved immediately.</li>
-              <li>Rooms are planned for a maximum of 2 people each.</li>
-              <li>You will be contacted if anything else is needed.</li>
-            </ul>
           </div>
         </section>
 
@@ -46,8 +42,8 @@ export default function HomePage() {
           <div className="section-inner narrow">
             <h2>Registration</h2>
             <p className="section-lead">
-              Open the card below and fill in your stay details so we can book
-              for you.
+              Online registration has closed. Thank you to everyone who
+              already submitted their stay details.
             </p>
             <RegisterCard />
           </div>

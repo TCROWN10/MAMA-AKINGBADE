@@ -882,6 +882,28 @@ a {
   color: rgba(15, 23, 32, 0.45);
 }
 
+.register-closed-notice {
+  padding: 1rem 1.05rem;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(21, 32, 51, 0.12);
+  background: rgba(15, 23, 32, 0.03);
+}
+
+.register-closed-title {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.register-closed-lead {
+  margin: 0.45rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(15, 23, 32, 0.62);
+}
+
 .register-dropdown-trigger {
   display: flex;
   align-items: center;

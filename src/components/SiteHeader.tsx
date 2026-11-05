@@ -26,8 +26,8 @@ export function SiteHeader() {
               {link.label}
             </a>
           ))}
-          <a href="#register" className="nav-cta">
-            Register stay
+          <a href="#contact" className="nav-cta">
+            Contact
           </a>
         </nav>
 

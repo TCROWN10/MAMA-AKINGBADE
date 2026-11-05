@@ -1,26 +1,13 @@
-"use client";
-
 import Image from "next/image";
-import { useEffect, useState } from "react";
-import { ReservationForm } from "./ReservationForm";
 
 type Props = {
   defaultOpen?: boolean;
   compact?: boolean;
 };
 
-export function RegisterCard({ defaultOpen = false, compact = false }: Props) {
-  const [open, setOpen] = useState(defaultOpen);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (window.location.hash === "#register") {
-      setOpen(true);
-    }
-  }, []);
-
+export function RegisterCard({ compact = false }: Props) {
   return (
-    <div className={`register-card ${open ? "is-open" : ""} ${compact ? "is-compact" : ""}`} id="register">
+    <div className={`register-card ${compact ? "is-compact" : ""}`} id="register">
       <div className="register-card-head">
         <div className="register-card-icon" aria-hidden>
           <Image
@@ -37,27 +24,12 @@ export function RegisterCard({ defaultOpen = false, compact = false }: Props) {
         </div>
       </div>
 
-      <button
-        type="button"
-        className="register-dropdown-trigger"
-        aria-expanded={open}
-        aria-controls="register-dropdown-panel"
-        onClick={() => setOpen((v) => !v)}
-      >
-        <span>
-          {open ? "Hide accommodation form" : "Fill up for your accommodation..."}
-        </span>
-        <span className={`register-chevron ${open ? "is-open" : ""}`} aria-hidden>
-          ▾
-        </span>
-      </button>
-
-      <div
-        id="register-dropdown-panel"
-        className="register-dropdown-panel"
-        hidden={!open}
-      >
-        {open ? <ReservationForm embedded /> : null}
+      <div className="register-closed-notice" role="status">
+        <p className="register-closed-title">Registration is no longer available</p>
+        <p className="register-closed-lead">
+          New accommodation requests are closed. The rest of this memorial site
+          remains open. For questions, please use the contact details below.
+        </p>
       </div>
     </div>
   );
